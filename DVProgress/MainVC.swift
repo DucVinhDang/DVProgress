@@ -20,21 +20,40 @@ class MainVC: UIViewController {
     
     @IBAction func handleCircleRotating(sender: AnyObject) {
         progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleRotating, messenge: "Hello, this is a progress view", animate: true)
+        delay(3, closure: {
+            self.progress?.hide(animate: true)
+        })
     }
     
     @IBAction func handleCircleLoading(sender: AnyObject) {
         progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleLoading, messenge: "Hello, this is a progress view", animate: true)
+        delay(3, closure: {
+            self.progress?.hide(animate: true)
+        })
     }
     
     @IBAction func handleBarLoading(sender: AnyObject) {
         progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.BarLoading, messenge: "Hello, this is a progress view", animate: true)
+        delay(3, closure: {
+            self.progress?.hide(animate: true)
+        })
     }
     
     @IBAction func handleTextOnly(sender: AnyObject) {
         progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.TextOnly, messenge: "Hello, this is a progress view", animate: true)
+        delay(3, closure: {
+            self.progress?.hide(animate: true)
+        })
     }
     
-    
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
+    }
 
     /*
     // MARK: - Navigation

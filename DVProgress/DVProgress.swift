@@ -35,6 +35,8 @@ class DVProgress: UIViewController {
     private var messenge: String = ""
     
     private var animate = true
+    private let showDuration = 0.3
+    private let hideDuration = 0.2
     
     // MARK: - VIEW METHODS
     
@@ -98,7 +100,7 @@ class DVProgress: UIViewController {
         
     }
     
-    // MARK: - SETUPS/CREATES/REMOVES VIEW METHODS
+    // MARK: - SETUPS/CREATES VIEW METHODS
     
     private func setupView() {
         view.frame = UIScreen.mainScreen().bounds
@@ -168,6 +170,25 @@ class DVProgress: UIViewController {
         shadowView = sView
     }
     
+    // MARK: - REMOVES VIEW METHODS
+    
+    private func removeAllViews() {
+        animationView.removeFromSuperview()
+        animationView = nil
+        
+        messengeTextView?.removeFromSuperview()
+        messengeTextView = nil
+        
+        containerView.removeFromSuperview()
+        containerView = nil
+
+        shadowView?.removeFromSuperview()
+        shadowView = nil
+        
+        view.removeFromSuperview()
+        view = nil
+    }
+    
     // MARK: - SHOWS/HIDES VIEW METHODS
     
     private func show() {
@@ -177,22 +198,45 @@ class DVProgress: UIViewController {
         shadowView?.alpha = 0
         containerView.alpha = 0
         
-        UIView.animateWithDuration(0.3, animations: {
+        if self.animate {
+            UIView.animateWithDuration(showDuration, animations: {
+                self.shadowView?.alpha = 0.8
+                self.containerView.alpha = 1
+                }, completion: { finished in
+        
+            })
+        } else {
             self.shadowView?.alpha = 0.8
             self.containerView.alpha = 1
-            }, completion: { finished in
-        
-        })
+        }
     }
     
     private func hide() {
-        
+        if self.animate {
+            UIView.animateWithDuration(hideDuration, animations: {
+                self.shadowView?.alpha = 0
+                self.containerView.alpha = 0
+                }, completion: { finished in
+                    self.removeAllViews()
+            })
+        } else {
+            self.shadowView?.alpha = 0
+            self.containerView.alpha = 0
+            self.removeAllViews()
+        }
     }
     
     // MARK: - SUPPORTING METHODS
     
     private func updateContainerViewHeightByValue(value: CGFloat) {
         if (containerView != nil) { containerView.frame.size.height += value }
+    }
+    
+    // MARK: - INTERACTS WITH PARENT VIEW CONTROLLER
+    
+    func hide(animate animate: Bool) {
+        self.animate = animate
+        hide()
     }
     
     // MARK: - UIVIEW CLASSES
