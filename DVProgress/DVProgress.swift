@@ -17,19 +17,19 @@ class DVProgress: UIViewController {
     }
     
     weak var containerView: UIView!
-    weak var animationView: AnimationView!
+    weak var animationView: AnimationView?
     weak var messengeTextView: UITextView?
     weak var target: UIView!
     weak var shadowView: UIView?
     
     private let deviceWidth = UIScreen.mainScreen().bounds.width
     private let deviceHeight = UIScreen.mainScreen().bounds.height
-    private var containerViewWidth: CGFloat = 160
-    private var containerViewHeight: CGFloat = 160
+    private var containerViewWidth: CGFloat = 140
+    private var containerViewHeight: CGFloat = 140
     private var animationViewWidth: CGFloat = 80
     private var animationViewHeight: CGFloat = 80
     private let containerViewPadding: CGFloat = 10
-    private var distanceBetweenAnimationViewAndMessengeTextView: CGFloat = 10
+    private var distanceBetweenAnimationViewAndMessengeTextView: CGFloat = 0
     
     private var progressStyle: DVProgressStyle = .CircleRotating
     private var messenge: String = ""
@@ -37,6 +37,10 @@ class DVProgress: UIViewController {
     private var animate = true
     private let showDuration = 0.3
     private let hideDuration = 0.2
+    
+    private var animationTimer: NSTimer?
+    private let crDuration: NSTimeInterval = 0.1
+    private let clDuration: NSTimeInterval = 0.1
     
     // MARK: - VIEW METHODS
     
@@ -85,19 +89,26 @@ class DVProgress: UIViewController {
     }
 
     private func handleCircleRotating() {
-        
+        animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleRotating
+        animationTimer = NSTimer.scheduledTimerWithTimeInterval(crDuration, target: self, selector: Selector("updateCircleRotating"), userInfo: nil, repeats: true)
     }
     
     private func handleCircleLoading() {
-        
+        animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleLoading
     }
     
     private func handleBarLoading() {
-        
+        animationView?.style = DVProgress.AnimationView.AnimationStyle.BarLoading
     }
     
     private func handleTextOnly() {
         
+    }
+    
+    // MARK: - UPDATES ANIMATION FOR ANIMATION VIEW
+    
+    func updateCircleRotating() {
+        animationView?.setNeedsDisplay()
     }
     
     // MARK: - SETUPS/CREATES VIEW METHODS
@@ -124,9 +135,11 @@ class DVProgress: UIViewController {
     
     private func createAnimationView() {
         if progressStyle != .TextOnly {
-            if progressStyle == .BarLoading { animationViewHeight = 40 }
+            if progressStyle == .BarLoading {
+                animationViewWidth = 100
+                animationViewHeight = 20
+            }
             let aView = AnimationView(frame: CGRect(x: (containerViewWidth - animationViewWidth)/2, y: containerViewPadding, width: animationViewWidth, height: animationViewHeight))
-            aView.backgroundColor = UIColor.yellowColor()
             containerView.addSubview(aView)
             animationView = aView
         } else {
@@ -151,17 +164,11 @@ class DVProgress: UIViewController {
         mTextView.editable = false
         mTextView.scrollEnabled = false
         mTextView.textAlignment = .Center
-        mTextView.text = messenge
-        
-        let newSize = mTextView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        mTextView.frame.size.height = newSize.height
         
         containerView.addSubview(mTextView)
         messengeTextView = mTextView
         
-        let valueChangeHeight = (CGRectGetMaxY(mTextView.frame) + containerViewPadding) - containerViewHeight
-        updateContainerViewHeightByValue(valueChangeHeight)
-        
+        updateFrameByNewMessenge()
     }
     
     private func createShadowView() {
@@ -176,8 +183,15 @@ class DVProgress: UIViewController {
     
     // MARK: - REMOVES VIEW METHODS
     
+    private func stopAnimation() {
+        if(animationTimer != nil) {
+            animationTimer?.invalidate()
+            animationTimer = nil
+        }
+    }
+    
     private func removeAllViews() {
-        animationView.removeFromSuperview()
+        animationView?.removeFromSuperview()
         animationView = nil
         
         messengeTextView?.removeFromSuperview()
@@ -226,14 +240,27 @@ class DVProgress: UIViewController {
         } else {
             self.shadowView?.alpha = 0
             self.containerView.alpha = 0
+            self.stopAnimation()
             self.removeAllViews()
         }
     }
     
     // MARK: - SUPPORTING METHODS
     
+    private func updateFrameByNewMessenge() {
+        messengeTextView!.text = messenge
+        let newSize = messengeTextView!.sizeThatFits(CGSize(width: messengeTextView!.frame.width, height: deviceHeight))
+        messengeTextView!.frame.size.height = newSize.height
+        
+        let valueChangeHeight = (CGRectGetMaxY(messengeTextView!.frame) + containerViewPadding) - containerViewHeight
+        updateContainerViewHeightByValue(valueChangeHeight)
+    }
+    
     private func updateContainerViewHeightByValue(value: CGFloat) {
-        if (containerView != nil) { containerView.frame.size.height += value }
+        if (containerView != nil) {
+            containerView.frame.size.height += value
+            containerView.center = CGPoint(x: deviceWidth/2, y: deviceHeight/2)
+        }
     }
     
     // MARK: - INTERACTS WITH PARENT VIEW CONTROLLER
@@ -243,17 +270,101 @@ class DVProgress: UIViewController {
         hide()
     }
     
+    ////////////////////////////
     // MARK: - UIVIEW CLASSES
+    ////////////////////////////
     
     class AnimationView: UIView {
         
+        enum AnimationStyle {
+            case CircleRotating, CircleLoading, BarLoading
+        }
         
+        // MARK: - VARIABLES
+        
+        // CIRCLE ROTATING
+        
+        let crMarkerWidth: CGFloat = 5.0
+        let crMarkerHeight: CGFloat = 12.0
+        let crMarkerColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
+        let crMarkerColorHighlighted = UIColor.whiteColor()
+        let crMarkerNumber = 12
+        var currentTurn = 0
+        
+        // CIRCLE LOADING
+        
+        // BAR LOADING
+        
+        var style: AnimationStyle? {
+            didSet(value) {
+                setNeedsDisplay()
+            }
+        }
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            self.backgroundColor = UIColor.clearColor()
+        }
+
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
         
         override func drawRect(rect: CGRect) {
             super.drawRect(rect)
+            if(style == nil) { return }
             
+            switch style! {
+            case .CircleRotating:
+                handleCircleRotating(rect)
+                break
+            case .CircleLoading:
+                handleCircleLoading(rect)
+                break
+            case .BarLoading:
+                handleBarLoading(rect)
+                break
+            }
+        }
+        
+        func handleCircleRotating(rect: CGRect) {
+            let context = UIGraphicsGetCurrentContext()
+            
+            CGContextSaveGState(context)
+            let markerPath = UIBezierPath(roundedRect: CGRect(x: -crMarkerWidth/2, y: 0, width: crMarkerWidth, height: crMarkerHeight), cornerRadius: 6.0)
+            
+            CGContextTranslateCTM(context, rect.width/2, rect.height/2)
+            
+            let arcPerMarker = CGFloat((2 * M_PI)/Double(crMarkerNumber))
+            
+            currentTurn += 1
+            if currentTurn > crMarkerNumber { currentTurn = 1 }
+            
+            for i in 1...crMarkerNumber {
+                CGContextSaveGState(context)
+                let angle = arcPerMarker * CGFloat(i) - CGFloat(M_PI) - arcPerMarker
+                
+                CGContextRotateCTM(context, angle)
+                CGContextTranslateCTM(context, 0, rect.height/2 - crMarkerHeight - 10)
+                
+                if(i == currentTurn) { crMarkerColorHighlighted.setFill() }
+                else { crMarkerColor.setFill() }
+                
+                markerPath.fill()
+                CGContextRestoreGState(context)
+            }
+            
+            CGContextRestoreGState(context)
+        }
+        
+        func handleCircleLoading(rect: CGRect) {
             
         }
+        
+        func handleBarLoading(rect: CGRect) {
+            
+        }
+        
     }
     
 

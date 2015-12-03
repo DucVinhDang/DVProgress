@@ -19,8 +19,8 @@ class MainVC: UIViewController {
     }
     
     @IBAction func handleCircleRotating(sender: AnyObject) {
-        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleRotating, messenge: "Hello, this is a progress view", animate: true)
-        delay(3, closure: {
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleRotating, messenge: "Waiting for server to get the response", animate: true)
+        delay(10, closure: {
             self.progress?.hide(animate: true)
         })
     }
@@ -33,7 +33,7 @@ class MainVC: UIViewController {
     }
     
     @IBAction func handleBarLoading(sender: AnyObject) {
-        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.BarLoading, messenge: "Hello, this is a progress view", animate: true)
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.BarLoading, messenge: "aaaaaaaaaaaaaaaaaaaa", animate: true)
         delay(3, closure: {
             self.progress?.hide(animate: true)
         })
