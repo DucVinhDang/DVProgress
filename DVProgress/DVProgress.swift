@@ -20,6 +20,7 @@ class DVProgress: UIViewController {
     weak var animationView: AnimationView!
     weak var messengeTextView: UITextView?
     weak var target: UIView!
+    weak var shadowView: UIView?
     
     private let deviceWidth = UIScreen.mainScreen().bounds.width
     private let deviceHeight = UIScreen.mainScreen().bounds.height
@@ -28,7 +29,7 @@ class DVProgress: UIViewController {
     private var animationViewWidth: CGFloat = 80
     private var animationViewHeight: CGFloat = 80
     private let containerViewPadding: CGFloat = 10
-    private let distanceBetweenAnimationViewAndMessengeTextView: CGFloat = 10
+    private var distanceBetweenAnimationViewAndMessengeTextView: CGFloat = 10
     
     private var progressStyle: DVProgressStyle = .CircleRotating
     private var messenge: String = ""
@@ -46,22 +47,11 @@ class DVProgress: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        setupView()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
-    }
-    
-    private func setupView() {
-        view.frame = UIScreen.mainScreen().bounds
-        view.backgroundColor = UIColor.clearColor()
-        view.translatesAutoresizingMaskIntoConstraints = true
-        view.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
+        setupView()
+        createShadowView()
     }
     
     // MARK: - INIT METHODS
@@ -108,11 +98,20 @@ class DVProgress: UIViewController {
         
     }
     
+    // MARK: - SETUPS/CREATES/REMOVES VIEW METHODS
+    
+    private func setupView() {
+        view.frame = UIScreen.mainScreen().bounds
+        view.backgroundColor = UIColor.clearColor()
+        view.translatesAutoresizingMaskIntoConstraints = true
+        view.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
+    }
+    
     private func createContainerView() {
         let cView = UIView(frame: CGRect(x: 0, y: 0, width: containerViewWidth, height: containerViewHeight))
         cView.center = CGPoint(x: deviceWidth/2, y: deviceHeight/2)
         cView.backgroundColor = UIColor.blackColor()
-        cView.alpha = 0.8
+        cView.alpha = 0.5
         cView.clipsToBounds = true
         cView.layer.cornerRadius = 10.0
         view.addSubview(cView)
@@ -120,10 +119,17 @@ class DVProgress: UIViewController {
     }
     
     private func createAnimationView() {
-        let aView = AnimationView(frame: CGRect(x: (containerViewWidth - animationViewWidth)/2, y: containerViewPadding, width: animationViewWidth, height: animationViewHeight))
-        aView.backgroundColor = UIColor.yellowColor()
-        containerView.addSubview(aView)
-        animationView = aView
+        if progressStyle != .TextOnly {
+            if progressStyle == .BarLoading { animationViewHeight = 40 }
+            let aView = AnimationView(frame: CGRect(x: (containerViewWidth - animationViewWidth)/2, y: containerViewPadding, width: animationViewWidth, height: animationViewHeight))
+            aView.backgroundColor = UIColor.yellowColor()
+            containerView.addSubview(aView)
+            animationView = aView
+        } else {
+            animationViewWidth = 0
+            animationViewHeight = 0
+            distanceBetweenAnimationViewAndMessengeTextView = 0
+        }
 
     }
     
@@ -134,8 +140,10 @@ class DVProgress: UIViewController {
         }
         
         let fixedWidth: CGFloat = containerViewWidth - (2*containerViewPadding)
-        let mTextView = UITextView(frame: CGRect(x: containerViewPadding, y: CGRectGetMaxY(animationView.frame) + distanceBetweenAnimationViewAndMessengeTextView , width: fixedWidth, height: 0))
+        let mTextView = UITextView(frame: CGRect(x: containerViewPadding, y: containerViewPadding + animationViewHeight + distanceBetweenAnimationViewAndMessengeTextView , width: fixedWidth, height: 0))
+        mTextView.backgroundColor = UIColor.clearColor()
         mTextView.font = UIFont(name: "Helvetica", size: 12)
+        mTextView.textColor = UIColor.whiteColor()
         mTextView.editable = false
         mTextView.scrollEnabled = false
         mTextView.textAlignment = .Center
@@ -152,19 +160,39 @@ class DVProgress: UIViewController {
         
     }
     
-    private func updateContainerViewHeightByValue(value: CGFloat) {
-        if (containerView != nil) { containerView.frame.size.height += value }
+    private func createShadowView() {
+        let sView = UIView(frame: view.frame)
+        sView.backgroundColor = UIColor.blackColor()
+        sView.layer.zPosition = -5
+        view.addSubview(sView)
+        shadowView = sView
     }
     
-    // MARK: - SHOW/HIDE VIEW METHODS
+    // MARK: - SHOWS/HIDES VIEW METHODS
     
     private func show() {
         if(target == nil) { return }
         target.addSubview(self.view)
+        
+        shadowView?.alpha = 0
+        containerView.alpha = 0
+        
+        UIView.animateWithDuration(0.3, animations: {
+            self.shadowView?.alpha = 0.8
+            self.containerView.alpha = 1
+            }, completion: { finished in
+        
+        })
     }
     
     private func hide() {
         
+    }
+    
+    // MARK: - SUPPORTING METHODS
+    
+    private func updateContainerViewHeightByValue(value: CGFloat) {
+        if (containerView != nil) { containerView.frame.size.height += value }
     }
     
     // MARK: - UIVIEW CLASSES

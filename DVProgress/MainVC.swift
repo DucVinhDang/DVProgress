@@ -9,23 +9,31 @@
 import UIKit
 
 class MainVC: UIViewController {
+    
+    var progress: DVProgress?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
-        let progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleLoading, messenge: "Hello, this is a progress view", animate: true)
-        
-        
-        
-        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @IBAction func handleCircleRotating(sender: AnyObject) {
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleRotating, messenge: "Hello, this is a progress view", animate: true)
     }
+    
+    @IBAction func handleCircleLoading(sender: AnyObject) {
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleLoading, messenge: "Hello, this is a progress view", animate: true)
+    }
+    
+    @IBAction func handleBarLoading(sender: AnyObject) {
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.BarLoading, messenge: "Hello, this is a progress view", animate: true)
+    }
+    
+    @IBAction func handleTextOnly(sender: AnyObject) {
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.TextOnly, messenge: "Hello, this is a progress view", animate: true)
+    }
+    
     
 
     /*
