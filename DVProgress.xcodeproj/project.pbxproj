@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		A3FC38D01C0F473900C0CF79 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FC38CF1C0F473900C0CF79 /* AppDelegate.swift */; };
-		A3FC38D21C0F473900C0CF79 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FC38D11C0F473900C0CF79 /* ViewController.swift */; };
-		A3FC38D51C0F473900C0CF79 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3FC38D31C0F473900C0CF79 /* Main.storyboard */; };
 		A3FC38D71C0F473900C0CF79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3FC38D61C0F473900C0CF79 /* Assets.xcassets */; };
 		A3FC38DA1C0F473900C0CF79 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3FC38D81C0F473900C0CF79 /* LaunchScreen.storyboard */; };
 		A3FC38E51C0F473900C0CF79 /* DVProgressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FC38E41C0F473900C0CF79 /* DVProgressTests.swift */; };
 		A3FC38F01C0F473900C0CF79 /* DVProgressUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FC38EF1C0F473900C0CF79 /* DVProgressUITests.swift */; };
+		A3FC39061C0F47ED00C0CF79 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FC39041C0F47ED00C0CF79 /* MainVC.swift */; };
+		A3FC39071C0F47ED00C0CF79 /* MainVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3FC39051C0F47ED00C0CF79 /* MainVC.xib */; };
+		A3FC390A1C0F484A00C0CF79 /* DVProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FC39091C0F484A00C0CF79 /* DVProgress.swift */; };
+		A3FC390C1C0F691600C0CF79 /* ButterflySmall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A3FC390B1C0F691600C0CF79 /* ButterflySmall.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,8 +38,6 @@
 /* Begin PBXFileReference section */
 		A3FC38CC1C0F473900C0CF79 /* DVProgress.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DVProgress.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3FC38CF1C0F473900C0CF79 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A3FC38D11C0F473900C0CF79 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		A3FC38D41C0F473900C0CF79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A3FC38D61C0F473900C0CF79 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A3FC38D91C0F473900C0CF79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A3FC38DB1C0F473900C0CF79 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -47,6 +47,10 @@
 		A3FC38EB1C0F473900C0CF79 /* DVProgressUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DVProgressUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3FC38EF1C0F473900C0CF79 /* DVProgressUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DVProgressUITests.swift; sourceTree = "<group>"; };
 		A3FC38F11C0F473900C0CF79 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A3FC39041C0F47ED00C0CF79 /* MainVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
+		A3FC39051C0F47ED00C0CF79 /* MainVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainVC.xib; sourceTree = "<group>"; };
+		A3FC39091C0F484A00C0CF79 /* DVProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVProgress.swift; sourceTree = "<group>"; };
+		A3FC390B1C0F691600C0CF79 /* ButterflySmall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ButterflySmall.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,9 +101,12 @@
 		A3FC38CE1C0F473900C0CF79 /* DVProgress */ = {
 			isa = PBXGroup;
 			children = (
-				A3FC38CF1C0F473900C0CF79 /* AppDelegate.swift */,
-				A3FC38D11C0F473900C0CF79 /* ViewController.swift */,
-				A3FC38D31C0F473900C0CF79 /* Main.storyboard */,
+				A3FC39001C0F478A00C0CF79 /* Application */,
+				A3FC39021C0F479800C0CF79 /* Library */,
+				A3FC39011C0F479300C0CF79 /* Controllers */,
+				A3FC38FF1C0F477400C0CF79 /* Vendors */,
+				A3FC38FE1C0F477000C0CF79 /* Resources */,
+				A3FC38FD1C0F476C00C0CF79 /* Models */,
 				A3FC38D61C0F473900C0CF79 /* Assets.xcassets */,
 				A3FC38D81C0F473900C0CF79 /* LaunchScreen.storyboard */,
 				A3FC38DB1C0F473900C0CF79 /* Info.plist */,
@@ -123,6 +130,69 @@
 				A3FC38F11C0F473900C0CF79 /* Info.plist */,
 			);
 			path = DVProgressUITests;
+			sourceTree = "<group>";
+		};
+		A3FC38FD1C0F476C00C0CF79 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		A3FC38FE1C0F477000C0CF79 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A3FC390B1C0F691600C0CF79 /* ButterflySmall.jpg */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		A3FC38FF1C0F477400C0CF79 /* Vendors */ = {
+			isa = PBXGroup;
+			children = (
+				A3FC39081C0F47FB00C0CF79 /* DVProgress */,
+			);
+			name = Vendors;
+			sourceTree = "<group>";
+		};
+		A3FC39001C0F478A00C0CF79 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				A3FC38CF1C0F473900C0CF79 /* AppDelegate.swift */,
+			);
+			name = Application;
+			sourceTree = "<group>";
+		};
+		A3FC39011C0F479300C0CF79 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A3FC39031C0F47CA00C0CF79 /* MainVC */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		A3FC39021C0F479800C0CF79 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		A3FC39031C0F47CA00C0CF79 /* MainVC */ = {
+			isa = PBXGroup;
+			children = (
+				A3FC39041C0F47ED00C0CF79 /* MainVC.swift */,
+				A3FC39051C0F47ED00C0CF79 /* MainVC.xib */,
+			);
+			name = MainVC;
+			sourceTree = "<group>";
+		};
+		A3FC39081C0F47FB00C0CF79 /* DVProgress */ = {
+			isa = PBXGroup;
+			children = (
+				A3FC39091C0F484A00C0CF79 /* DVProgress.swift */,
+			);
+			name = DVProgress;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,9 +302,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3FC39071C0F47ED00C0CF79 /* MainVC.xib in Resources */,
 				A3FC38DA1C0F473900C0CF79 /* LaunchScreen.storyboard in Resources */,
 				A3FC38D71C0F473900C0CF79 /* Assets.xcassets in Resources */,
-				A3FC38D51C0F473900C0CF79 /* Main.storyboard in Resources */,
+				A3FC390C1C0F691600C0CF79 /* ButterflySmall.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,8 +330,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3FC38D21C0F473900C0CF79 /* ViewController.swift in Sources */,
 				A3FC38D01C0F473900C0CF79 /* AppDelegate.swift in Sources */,
+				A3FC390A1C0F484A00C0CF79 /* DVProgress.swift in Sources */,
+				A3FC39061C0F47ED00C0CF79 /* MainVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,14 +368,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		A3FC38D31C0F473900C0CF79 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A3FC38D41C0F473900C0CF79 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		A3FC38D81C0F473900C0CF79 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
