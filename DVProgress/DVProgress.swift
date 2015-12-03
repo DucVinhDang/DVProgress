@@ -116,6 +116,8 @@ class DVProgress: UIViewController {
         cView.alpha = 0.5
         cView.clipsToBounds = true
         cView.layer.cornerRadius = 10.0
+        cView.translatesAutoresizingMaskIntoConstraints = true
+        cView.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin, UIViewAutoresizing.FlexibleTopMargin, UIViewAutoresizing.FlexibleBottomMargin]
         view.addSubview(cView)
         containerView = cView
     }
@@ -166,6 +168,8 @@ class DVProgress: UIViewController {
         let sView = UIView(frame: view.frame)
         sView.backgroundColor = UIColor.blackColor()
         sView.layer.zPosition = -5
+        sView.translatesAutoresizingMaskIntoConstraints = true
+        sView.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
         view.addSubview(sView)
         shadowView = sView
     }
