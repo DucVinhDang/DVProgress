@@ -301,7 +301,9 @@ class DVProgress: UIViewController {
         let clOutlineWidth: CGFloat = 12.0
         let subClOutLineWidth: CGFloat = 3.0
         let clOutlineFirstRoundColor = UIColor.whiteColor()
-        let clOutlineSecondRoundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
+        let clOutlineSecondRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
+        let clSecondOutlineFirstRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
+        let clSecondOutlineSecondRoundColor = UIColor.whiteColor()
         let clFps = 60
         var clIsFirstRound = true
         var clCurrentTurn = 0
@@ -372,9 +374,6 @@ class DVProgress: UIViewController {
         
         func handleCircleLoading(rect: CGRect) {
             
-            if(clIsFirstRound) { clOutlineFirstRoundColor.setStroke() }
-            else { clOutlineSecondRoundColor.setStroke() }
-            
             let arcPerMarker = CGFloat((2 * M_PI)/Double(clFps))
             let pathCenter = CGPoint(x: rect.width/2, y: rect.height/2)
             let radius = min(rect.width/2, rect.height/2) - clOutlineWidth/2 - 5
@@ -386,15 +385,36 @@ class DVProgress: UIViewController {
                 clIsFirstRound = !clIsFirstRound
             }
             
-            let outlinePath = UIBezierPath(arcCenter: pathCenter, radius: radius, startAngle: CGFloat(-M_PI/2), endAngle: CGFloat(-M_PI/2) + (arcPerMarker*CGFloat(clCurrentTurn)), clockwise: true)
+            let startAngle = CGFloat(-M_PI/2)
+            let endAngle = CGFloat(-M_PI/2) + (arcPerMarker*CGFloat(clCurrentTurn))
+            
+            if(clIsFirstRound) { clOutlineFirstRoundColor.setStroke() }
+            else { clOutlineSecondRoundColor.setStroke() }
+            
+            let outlinePath = UIBezierPath(arcCenter: pathCenter, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
             outlinePath.lineWidth = clOutlineWidth
             outlinePath.stroke()
             outlinePath.closePath()
             
-            let subOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: subRadius, startAngle: CGFloat(-M_PI/2), endAngle: CGFloat(-M_PI/2) + (arcPerMarker*CGFloat(clCurrentTurn)), clockwise: true)
+            let subOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: subRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
             subOutlinePath.lineWidth = subClOutLineWidth
             subOutlinePath.stroke()
             subOutlinePath.closePath()
+            
+            if(clIsFirstRound) { clSecondOutlineFirstRoundColor.setStroke() }
+            else { clSecondOutlineSecondRoundColor.setStroke() }
+            
+            let secondOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: radius, startAngle: endAngle, endAngle: startAngle, clockwise: true)
+            secondOutlinePath.lineWidth = clOutlineWidth
+            secondOutlinePath.stroke()
+            secondOutlinePath.closePath()
+            
+            let secondSubOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: subRadius, startAngle: endAngle, endAngle: startAngle, clockwise: true)
+            secondSubOutlinePath.lineWidth = subClOutLineWidth
+            secondSubOutlinePath.stroke()
+            secondSubOutlinePath.closePath()
+            
+            
         }
         
         func handleBarLoading(rect: CGRect) {

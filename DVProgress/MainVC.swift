@@ -27,7 +27,7 @@ class MainVC: UIViewController {
     
     @IBAction func handleCircleLoading(sender: AnyObject) {
         progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleLoading, messenge: "Hello, this is a progress view", animate: true)
-        delay(5, closure: {
+        delay(10, closure: {
             self.progress?.hide(animate: true)
         })
     }
