@@ -439,7 +439,6 @@ class DVProgress: UIViewController {
             secondSubOutlinePath.stroke()
             secondSubOutlinePath.closePath()
             
-            
         }
         
         // MARK: - HANDLE BAR LOADING
@@ -447,22 +446,20 @@ class DVProgress: UIViewController {
         private func handleBarLoading(rect: CGRect) {
             if (style != DVProgress.AnimationView.AnimationStyle.BarLoading) { return }
             
-            blCurrentValue += 1
+            blCurrentValue += CGFloat(arc4random()%5)
             if(blCurrentValue > blMaxValue) {
-                blCurrentValue = blMinValue
+                blCurrentValue = blMaxValue
             }
             
             self.layer.borderWidth = blOutlineWidth
             self.layer.borderColor = blOutlineColor.CGColor
+            self.layer.cornerRadius = 8.0
             
-            let distanceToGo = (rect.width/blMaxValue) * blCurrentValue
+            let distanceToGo = (rect.width/blMaxValue) * blCurrentValue - (2*blOutlineWidth)
             
-            let linePath = UIBezierPath()
-            linePath.moveToPoint(CGPoint(x: 0, y: rect.height/2))
-            linePath.addLineToPoint(CGPoint(x: distanceToGo, y: rect.height/2))
-            linePath.lineWidth = rect.height - (2*blOutlineWidth)
-            blInlineColor.setStroke()
-            linePath.stroke()
+            let linePath = UIBezierPath(roundedRect: CGRect(x: blOutlineWidth, y: blOutlineWidth, width: distanceToGo, height: rect.height - (2*blOutlineWidth)), cornerRadius: 5.0)
+            blInlineColor.setFill()
+            linePath.fill()
             linePath.closePath()
             
         }
