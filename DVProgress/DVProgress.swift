@@ -40,7 +40,7 @@ class DVProgress: UIViewController {
     
     private var animationTimer: NSTimer?
     private let crDuration: NSTimeInterval = 0.1
-    private let clDuration: NSTimeInterval = 0.1
+    private let clDuration: NSTimeInterval = 1/30
     
     // MARK: - VIEW METHODS
     
@@ -95,6 +95,7 @@ class DVProgress: UIViewController {
     
     private func handleCircleLoading() {
         animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleLoading
+        animationTimer = NSTimer.scheduledTimerWithTimeInterval(clDuration, target: self, selector: Selector("updateCircleLoading"), userInfo: nil, repeats: true)
     }
     
     private func handleBarLoading() {
@@ -108,6 +109,10 @@ class DVProgress: UIViewController {
     // MARK: - UPDATES ANIMATION FOR ANIMATION VIEW
     
     func updateCircleRotating() {
+        animationView?.setNeedsDisplay()
+    }
+    
+    func updateCircleLoading() {
         animationView?.setNeedsDisplay()
     }
     
@@ -289,9 +294,17 @@ class DVProgress: UIViewController {
         let crMarkerColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
         let crMarkerColorHighlighted = UIColor.whiteColor()
         let crMarkerNumber = 12
-        var currentTurn = 0
+        var crCurrentTurn = 0
         
         // CIRCLE LOADING
+        
+        let clOutlineWidth: CGFloat = 12.0
+        let subClOutLineWidth: CGFloat = 3.0
+        let clOutlineFirstRoundColor = UIColor.whiteColor()
+        let clOutlineSecondRoundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
+        let clFps = 60
+        var clIsFirstRound = true
+        var clCurrentTurn = 0
         
         // BAR LOADING
         
@@ -337,8 +350,8 @@ class DVProgress: UIViewController {
             
             let arcPerMarker = CGFloat((2 * M_PI)/Double(crMarkerNumber))
             
-            currentTurn += 1
-            if currentTurn > crMarkerNumber { currentTurn = 1 }
+            crCurrentTurn += 1
+            if crCurrentTurn > crMarkerNumber { crCurrentTurn = 1 }
             
             for i in 1...crMarkerNumber {
                 CGContextSaveGState(context)
@@ -347,18 +360,41 @@ class DVProgress: UIViewController {
                 CGContextRotateCTM(context, angle)
                 CGContextTranslateCTM(context, 0, rect.height/2 - crMarkerHeight - 10)
                 
-                if(i == currentTurn) { crMarkerColorHighlighted.setFill() }
+                if(i == crCurrentTurn) { crMarkerColorHighlighted.setFill() }
                 else { crMarkerColor.setFill() }
                 
                 markerPath.fill()
                 CGContextRestoreGState(context)
             }
-            
+            markerPath.closePath()
             CGContextRestoreGState(context)
         }
         
         func handleCircleLoading(rect: CGRect) {
             
+            if(clIsFirstRound) { clOutlineFirstRoundColor.setStroke() }
+            else { clOutlineSecondRoundColor.setStroke() }
+            
+            let arcPerMarker = CGFloat((2 * M_PI)/Double(clFps))
+            let pathCenter = CGPoint(x: rect.width/2, y: rect.height/2)
+            let radius = min(rect.width/2, rect.height/2) - clOutlineWidth/2 - 5
+            let subRadius = radius - 12
+            
+            clCurrentTurn += 1
+            if clCurrentTurn > clFps {
+                clCurrentTurn = 1
+                clIsFirstRound = !clIsFirstRound
+            }
+            
+            let outlinePath = UIBezierPath(arcCenter: pathCenter, radius: radius, startAngle: CGFloat(-M_PI/2), endAngle: CGFloat(-M_PI/2) + (arcPerMarker*CGFloat(clCurrentTurn)), clockwise: true)
+            outlinePath.lineWidth = clOutlineWidth
+            outlinePath.stroke()
+            outlinePath.closePath()
+            
+            let subOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: subRadius, startAngle: CGFloat(-M_PI/2), endAngle: CGFloat(-M_PI/2) + (arcPerMarker*CGFloat(clCurrentTurn)), clockwise: true)
+            subOutlinePath.lineWidth = subClOutLineWidth
+            subOutlinePath.stroke()
+            subOutlinePath.closePath()
         }
         
         func handleBarLoading(rect: CGRect) {
