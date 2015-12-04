@@ -100,6 +100,7 @@ class DVProgress: UIViewController {
     
     private func handleBarLoading() {
         animationView?.style = DVProgress.AnimationView.AnimationStyle.BarLoading
+        animationTimer = NSTimer.scheduledTimerWithTimeInterval(crDuration, target: self, selector: Selector("updateBarLoading"), userInfo: nil, repeats: true)
     }
     
     private func handleTextOnly() {
@@ -113,6 +114,10 @@ class DVProgress: UIViewController {
     }
     
     func updateCircleLoading() {
+        animationView?.setNeedsDisplay()
+    }
+    
+    func updateBarLoading() {
         animationView?.setNeedsDisplay()
     }
     
@@ -141,8 +146,11 @@ class DVProgress: UIViewController {
     private func createAnimationView() {
         if progressStyle != .TextOnly {
             if progressStyle == .BarLoading {
-                animationViewWidth = 100
-                animationViewHeight = 20
+                containerViewWidth = 220
+                containerView.frame.size.width = containerViewWidth
+                animationViewWidth = containerViewWidth - 60
+                animationViewHeight = 15
+                containerView.center = CGPoint(x: deviceWidth/2, y: deviceHeight/2)
             }
             let aView = AnimationView(frame: CGRect(x: (containerViewWidth - animationViewWidth)/2, y: containerViewPadding, width: animationViewWidth, height: animationViewHeight))
             containerView.addSubview(aView)
@@ -164,7 +172,7 @@ class DVProgress: UIViewController {
         let fixedWidth: CGFloat = containerViewWidth - (2*containerViewPadding)
         let mTextView = UITextView(frame: CGRect(x: containerViewPadding, y: containerViewPadding + animationViewHeight + distanceBetweenAnimationViewAndMessengeTextView , width: fixedWidth, height: 0))
         mTextView.backgroundColor = UIColor.clearColor()
-        mTextView.font = UIFont(name: "Helvetica", size: 12)
+        mTextView.font = UIFont(name: "Helvetica", size: 14)
         mTextView.textColor = UIColor.whiteColor()
         mTextView.editable = false
         mTextView.scrollEnabled = false
@@ -223,13 +231,13 @@ class DVProgress: UIViewController {
         
         if self.animate {
             UIView.animateWithDuration(showDuration, animations: {
-                self.shadowView?.alpha = 0.8
+                self.shadowView?.alpha = 0.7
                 self.containerView.alpha = 1
                 }, completion: { finished in
         
             })
         } else {
-            self.shadowView?.alpha = 0.8
+            self.shadowView?.alpha = 0.7
             self.containerView.alpha = 1
         }
     }
@@ -275,6 +283,11 @@ class DVProgress: UIViewController {
         hide()
     }
     
+    func setCurrentValueForBarLoading(value: Int) {
+        if(progressStyle != DVProgressStyle.BarLoading) { return }
+        animationView?.setCurrentValueForBarLoading(value)
+    }
+    
     ////////////////////////////
     // MARK: - UIVIEW CLASSES
     ////////////////////////////
@@ -285,36 +298,43 @@ class DVProgress: UIViewController {
             case CircleRotating, CircleLoading, BarLoading
         }
         
-        // MARK: - VARIABLES
-        
-        // CIRCLE ROTATING
-        
-        let crMarkerWidth: CGFloat = 5.0
-        let crMarkerHeight: CGFloat = 12.0
-        let crMarkerColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
-        let crMarkerColorHighlighted = UIColor.whiteColor()
-        let crMarkerNumber = 12
-        var crCurrentTurn = 0
-        
-        // CIRCLE LOADING
-        
-        let clOutlineWidth: CGFloat = 12.0
-        let subClOutLineWidth: CGFloat = 3.0
-        let clOutlineFirstRoundColor = UIColor.whiteColor()
-        let clOutlineSecondRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
-        let clSecondOutlineFirstRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
-        let clSecondOutlineSecondRoundColor = UIColor.whiteColor()
-        let clFps = 60
-        var clIsFirstRound = true
-        var clCurrentTurn = 0
-        
-        // BAR LOADING
-        
         var style: AnimationStyle? {
             didSet(value) {
                 setNeedsDisplay()
             }
         }
+        
+        // MARK: - VARIABLES
+        
+        // CIRCLE ROTATING
+        
+        private let crMarkerWidth: CGFloat = 5.0
+        private let crMarkerHeight: CGFloat = 12.0
+        private let crMarkerColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
+        private let crMarkerColorHighlighted = UIColor.whiteColor()
+        private let crMarkerNumber = 12
+        private var crCurrentTurn = 0
+        
+        // CIRCLE LOADING
+        
+        private let clOutlineWidth: CGFloat = 12.0
+        private let subClOutLineWidth: CGFloat = 3.0
+        private let clOutlineFirstRoundColor = UIColor.whiteColor()
+        private let clOutlineSecondRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
+        private let clSecondOutlineFirstRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
+        private let clSecondOutlineSecondRoundColor = UIColor.whiteColor()
+        private let clFps = 60
+        private var clIsFirstRound = true
+        private var clCurrentTurn = 0
+        
+        // BAR LOADING
+        
+        private let blOutlineWidth: CGFloat = 1.0
+        private let blOutlineColor = UIColor.whiteColor()
+        private let blInlineColor = UIColor.whiteColor()        
+        private let blMinValue: CGFloat = 0.0
+        private let blMaxValue: CGFloat = 100.0
+        private var blCurrentValue: CGFloat = 0.0
         
         override init(frame: CGRect) {
             super.init(frame: frame)
@@ -342,7 +362,10 @@ class DVProgress: UIViewController {
             }
         }
         
-        func handleCircleRotating(rect: CGRect) {
+        // MARK: - HANDLE CIRCLE ROTATING
+        
+        private func handleCircleRotating(rect: CGRect) {
+            if (style != DVProgress.AnimationView.AnimationStyle.CircleRotating) { return }
             let context = UIGraphicsGetCurrentContext()
             
             CGContextSaveGState(context)
@@ -372,15 +395,17 @@ class DVProgress: UIViewController {
             CGContextRestoreGState(context)
         }
         
-        func handleCircleLoading(rect: CGRect) {
-            
+        // MARK: - HANDLE CIRCLE LOADING
+        
+        private func handleCircleLoading(rect: CGRect) {
+            if (style != DVProgress.AnimationView.AnimationStyle.CircleLoading) { return }
             let arcPerMarker = CGFloat((2 * M_PI)/Double(clFps))
             let pathCenter = CGPoint(x: rect.width/2, y: rect.height/2)
-            let radius = min(rect.width/2, rect.height/2) - clOutlineWidth/2 - 5
+            let radius = min(rect.width/2, rect.height/2) - clOutlineWidth/2 - 10
             let subRadius = radius - 12
             
             clCurrentTurn += 1
-            if clCurrentTurn > clFps {
+            if clCurrentTurn >= clFps {
                 clCurrentTurn = 1
                 clIsFirstRound = !clIsFirstRound
             }
@@ -417,10 +442,35 @@ class DVProgress: UIViewController {
             
         }
         
-        func handleBarLoading(rect: CGRect) {
+        // MARK: - HANDLE BAR LOADING
+        
+        private func handleBarLoading(rect: CGRect) {
+            if (style != DVProgress.AnimationView.AnimationStyle.BarLoading) { return }
+            
+            blCurrentValue += 1
+            if(blCurrentValue > blMaxValue) {
+                blCurrentValue = blMinValue
+            }
+            
+            self.layer.borderWidth = blOutlineWidth
+            self.layer.borderColor = blOutlineColor.CGColor
+            
+            let distanceToGo = (rect.width/blMaxValue) * blCurrentValue
+            
+            let linePath = UIBezierPath()
+            linePath.moveToPoint(CGPoint(x: 0, y: rect.height/2))
+            linePath.addLineToPoint(CGPoint(x: distanceToGo, y: rect.height/2))
+            linePath.lineWidth = rect.height - (2*blOutlineWidth)
+            blInlineColor.setStroke()
+            linePath.stroke()
+            linePath.closePath()
             
         }
         
+        func setCurrentValueForBarLoading(value: Int) {
+            blCurrentValue = CGFloat(value)
+            setNeedsDisplay()
+        }
     }
     
 

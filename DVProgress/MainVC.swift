@@ -19,14 +19,14 @@ class MainVC: UIViewController {
     }
     
     @IBAction func handleCircleRotating(sender: AnyObject) {
-        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleRotating, messenge: "Waiting for server to get the response", animate: true)
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleRotating, messenge: "Waiting for server", animate: true)
         delay(5, closure: {
             self.progress?.hide(animate: true)
         })
     }
     
     @IBAction func handleCircleLoading(sender: AnyObject) {
-        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleLoading, messenge: "Hello, this is a progress view", animate: true)
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleLoading, messenge: "Loading...", animate: true)
         delay(10, closure: {
             self.progress?.hide(animate: true)
         })
