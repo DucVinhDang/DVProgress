@@ -36,22 +36,14 @@ class MainVC: UIViewController {
     
     @IBAction func handleCircleProcessByValue(sender: AnyObject) {
         myValue = 0
-        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleProcessByValue, messenge: "Loading...", animate: true)
+        progress = DVProgress(showCircleProgressByValueInView: self.view, messenge: "Loading...", animate: true, autoHideWhenDone: true)
         testTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: Selector("updateCircleProcess"), userInfo: nil, repeats: true)
     }
     
     func updateCircleProcess() {
         let randomValue = Int(arc4random()%10) + 5
         myValue += randomValue
-        if(myValue >= 100) {
-            progress?.updateCircleProcessByValue(100)
-            myValue = 0
-            testTimer?.invalidate()
-            testTimer = nil
-            progress?.hide(animate: true)
-        } else {
-            progress?.updateCircleProcessByValue(myValue)
-        }
+        progress?.updateCircleProcessByValue(myValue)
     }
     
 
@@ -74,7 +66,6 @@ class MainVC: UIViewController {
         } else {
             progress?.updateBarProcessByValue(myValue)
         }
-
     }
     
     @IBAction func handleTextOnly(sender: AnyObject) {

@@ -75,7 +75,7 @@ class DVProgress: UIViewController {
         show()
     }
     
-    init(showCircleRotationInView targetView: UIView, style: DVProgressStyle, messenge: String?, animate: Bool) {
+    init(showCircleRotationInView targetView: UIView, messenge: String?, animate: Bool) {
         super.init(nibName: nil, bundle: nil)
         
         self.target = targetView
@@ -86,7 +86,7 @@ class DVProgress: UIViewController {
         show()
     }
     
-    init(showCircleProgressUnlimitedInView targetView: UIView, style: DVProgressStyle, messenge: String?, animate: Bool) {
+    init(showCircleProgressUnlimitedInView targetView: UIView, messenge: String?, animate: Bool) {
         super.init(nibName: nil, bundle: nil)
         
         self.target = targetView
@@ -97,7 +97,7 @@ class DVProgress: UIViewController {
         show()
     }
     
-    init(showCircleProgressByValueInView targetView: UIView, style: DVProgressStyle, messenge: String?, animate: Bool, autoHideWhenDone: Bool) {
+    init(showCircleProgressByValueInView targetView: UIView, messenge: String?, animate: Bool, autoHideWhenDone: Bool) {
         super.init(nibName: nil, bundle: nil)
         
         self.target = targetView
@@ -109,7 +109,7 @@ class DVProgress: UIViewController {
         show()
     }
     
-    init(showBarProgressByValueInView targetView: UIView, style: DVProgressStyle, messenge: String?, animate: Bool, autoHideWhenDone: Bool) {
+    init(showBarProgressByValueInView targetView: UIView, messenge: String?, animate: Bool, autoHideWhenDone: Bool) {
         super.init(nibName: nil, bundle: nil)
         
         self.target = targetView
@@ -121,7 +121,7 @@ class DVProgress: UIViewController {
         show()
     }
     
-    init(showTextOnlyInView targetView: UIView, style: DVProgressStyle, messenge: String?, animate: Bool) {
+    init(showTextOnlyInView targetView: UIView, messenge: String?, animate: Bool) {
         super.init(nibName: nil, bundle: nil)
         
         self.target = targetView
@@ -356,12 +356,20 @@ class DVProgress: UIViewController {
     
     func updateCircleProcessByValue(value: Int) {
         if(progressStyle != DVProgressStyle.CircleProcessByValue) { return }
-        animationView?.updateCurrentValueForCircleProcess(value)
+        animationView?.updateCurrentValueForCircleProcess(value, completion: { finished in
+            if(finished==true && self.autoHideWhenDone==true) {
+                self.hide()
+            }
+        })
     }
     
     func updateBarProcessByValue(value: Int) {
         if(progressStyle != DVProgressStyle.BarProcessByValue) { return }
-        animationView?.updateCurrentValueForBarProcess(value)
+        animationView?.updateCurrentValueForBarProcess(value, completion:  { finished in
+            if(finished && self.autoHideWhenDone) {
+                self.hide()
+            }
+        })
     }
     
     ////////////////////////////
@@ -492,10 +500,6 @@ class DVProgress: UIViewController {
                     cpCurrentValue = cpMinValue
                     cpIsFirstRound = !cpIsFirstRound
                 }
-            } else {
-                if cpCurrentValue >= cpMaxValue {
-                    cpCurrentValue = cpMaxValue
-                }
             }
             
             let startAngle = CGFloat(-M_PI/2)
@@ -532,9 +536,12 @@ class DVProgress: UIViewController {
             
         }
         
-        func updateCurrentValueForCircleProcess(value: Int) {
+        func updateCurrentValueForCircleProcess(value: Int, completion: (Bool)->()) {
             cpCurrentValue = CGFloat(value)
+            if cpCurrentValue >= cpMaxValue { cpCurrentValue = cpMaxValue }
             setNeedsDisplay()
+            if cpCurrentValue == cpMaxValue { completion(true) }
+            else { completion(false) }
         }
         
         // MARK: - HANDLE BAR LOADING
@@ -542,10 +549,6 @@ class DVProgress: UIViewController {
         private func handleBarProcessByValue(rect: CGRect) {
             
             if (style != DVProgress.AnimationView.AnimationStyle.BarProcessByValue) { return }
-            
-            if(bpCurrentValue > bpMaxValue) {
-                bpCurrentValue = bpMaxValue
-            }
             
             self.layer.borderWidth = bpOutlineWidth
             self.layer.borderColor = bpOutlineColor.CGColor
@@ -561,9 +564,14 @@ class DVProgress: UIViewController {
             
         }
         
-        func updateCurrentValueForBarProcess(value: Int) {
+        func updateCurrentValueForBarProcess(value: Int, completion: (Bool)->()) {
             bpCurrentValue = CGFloat(value)
+            if(bpCurrentValue >= bpMaxValue) { bpCurrentValue = bpMaxValue }
             setNeedsDisplay()
+            if bpCurrentValue == bpMaxValue {
+                completion(true)
+            }
+            else { completion(false) }
         }
     }
     
