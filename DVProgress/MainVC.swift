@@ -11,6 +11,8 @@ import UIKit
 class MainVC: UIViewController {
     
     var progress: DVProgress?
+    var testTimer: NSTimer?
+    var myValue: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +32,30 @@ class MainVC: UIViewController {
         delay(10, closure: {
             self.progress?.hide(animate: true)
         })
+    }
+    
+    @IBAction func handleCircleProcessByValue(sender: AnyObject) {
+        myValue = 0
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleProcessByValue, messenge: "Loading...", animate: true)
+        testTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: Selector("updateCircleProcess"), userInfo: nil, repeats: true)
+    }
+    
+    func updateCircleProcess() {
+        let randomValue = Int(arc4random()%10) + 5
+        myValue += randomValue
+        if(myValue >= 100) {
+            progress?.updateCircleProcessByValue(100)
+            myValue = 0
+            testTimer?.invalidate()
+            testTimer = nil
+            progress?.hide(animate: true)
+        } else {
+            progress?.updateCircleProcessByValue(myValue)
+        }
+    }
+    
+    @IBAction func handleBarProcessUnlimited(sender: AnyObject) {
+        
     }
     
     @IBAction func handleBarProcessByValue(sender: AnyObject) {

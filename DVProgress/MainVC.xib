@@ -41,6 +41,9 @@
                     <state key="normal" title="Circle Process By Value">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="handleCircleProcessByValue:" destination="-1" eventType="touchUpInside" id="GYA-91-gKi"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cgc-pb-8ye">
                     <rect key="frame" x="198" y="307" width="204" height="38"/>
@@ -53,6 +56,9 @@
                     <state key="normal" title="Bar Process Unlimited">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="handleBarProcessUnlimited:" destination="-1" eventType="touchUpInside" id="Nzz-65-Dve"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ji-y2-CAI">
                     <rect key="frame" x="198" y="360" width="204" height="38"/>

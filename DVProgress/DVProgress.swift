@@ -40,7 +40,7 @@ class DVProgress: UIViewController {
     
     private var animationTimer: NSTimer?
     private let crDuration: NSTimeInterval = 0.1
-    private let clDuration: NSTimeInterval = 1/30
+    private let cpDuration: NSTimeInterval = 1/60
     
     // MARK: - VIEW METHODS
     
@@ -77,13 +77,21 @@ class DVProgress: UIViewController {
         switch (self.progressStyle) {
         case .CircleRotation:
             handleCircleRotation()
+            break
         case .CircleProcessUnlimited:
             handleCircleProcessUnlimited()
+            break
+        case .CircleProcessByValue:
+            handleCircleProcessByValue()
+            break
+        case .BarProcessUnlimited:
+            handleBarProcessUnlimited()
+            break
         case .BarProcessByValue:
             handleBarProcessByValue()
+            break
         case .TextOnly:
             handleTextOnly()
-        default:
             break
         }
         
@@ -92,17 +100,24 @@ class DVProgress: UIViewController {
 
     private func handleCircleRotation() {
         animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleRotation
-        animationTimer = NSTimer.scheduledTimerWithTimeInterval(crDuration, target: self, selector: Selector("updateCircleRotating"), userInfo: nil, repeats: true)
+        animationTimer = NSTimer.scheduledTimerWithTimeInterval(crDuration, target: self, selector: Selector("updateCircleRotation"), userInfo: nil, repeats: true)
     }
     
     private func handleCircleProcessUnlimited() {
         animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleProcessUnlimited
-        animationTimer = NSTimer.scheduledTimerWithTimeInterval(clDuration, target: self, selector: Selector("updateCircleLoading"), userInfo: nil, repeats: true)
+        animationTimer = NSTimer.scheduledTimerWithTimeInterval(cpDuration, target: self, selector: Selector("updateCircleProcessUnlimited"), userInfo: nil, repeats: true)
+    }
+    
+    private func handleCircleProcessByValue() {
+        animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleProcessByValue
+    }
+    
+    private func handleBarProcessUnlimited() {
+        animationView?.style = DVProgress.AnimationView.AnimationStyle.BarProcessUnlimited
     }
     
     private func handleBarProcessByValue() {
         animationView?.style = DVProgress.AnimationView.AnimationStyle.BarProcessByValue
-        animationTimer = NSTimer.scheduledTimerWithTimeInterval(crDuration, target: self, selector: Selector("updateBarLoading"), userInfo: nil, repeats: true)
     }
     
     private func handleTextOnly() {
@@ -111,17 +126,14 @@ class DVProgress: UIViewController {
     
     // MARK: - UPDATES ANIMATION FOR ANIMATION VIEW
     
-    func updateCircleRotating() {
+    func updateCircleRotation() {
         animationView?.setNeedsDisplay()
     }
     
-    func updateCircleLoading() {
+    func updateCircleProcessUnlimited() {
         animationView?.setNeedsDisplay()
     }
     
-    func updateBarLoading() {
-        animationView?.setNeedsDisplay()
-    }
     
     // MARK: - SETUPS/CREATES VIEW METHODS
     
@@ -285,9 +297,14 @@ class DVProgress: UIViewController {
         hide()
     }
     
-    func setCurrentValueForBarProcessByValue(value: Int) {
+    func updateCircleProcessByValue(value: Int) {
+        if(progressStyle != DVProgressStyle.CircleProcessByValue) { return }
+        animationView?.updateCurrentValueForCircleProcess(value)
+    }
+    
+    func updateBarProcessByValue(value: Int) {
         if(progressStyle != DVProgressStyle.BarProcessByValue) { return }
-        animationView?.setCurrentValueForBarLoading(value)
+        animationView?.updateCurrentValueForBarProcess(value)
     }
     
     ////////////////////////////
@@ -308,7 +325,7 @@ class DVProgress: UIViewController {
         
         // MARK: - VARIABLES
         
-        // CIRCLE ROTATING
+        // CIRCLE ROTATION
         
         private let crMarkerWidth: CGFloat = 5.0
         private let crMarkerHeight: CGFloat = 12.0
@@ -317,26 +334,27 @@ class DVProgress: UIViewController {
         private let crMarkerNumber = 12
         private var crCurrentTurn = 0
         
-        // CIRCLE LOADING
+        // CIRCLE PROCESS
         
-        private let clOutlineWidth: CGFloat = 12.0
-        private let subClOutLineWidth: CGFloat = 3.0
-        private let clOutlineFirstRoundColor = UIColor.whiteColor()
-        private let clOutlineSecondRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
-        private let clSecondOutlineFirstRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
-        private let clSecondOutlineSecondRoundColor = UIColor.whiteColor()
-        private let clFps = 60
-        private var clIsFirstRound = true
-        private var clCurrentTurn = 0
+        private let cpOutlineWidth: CGFloat = 12.0
+        private let cpSubOutLineWidth: CGFloat = 3.0
+        private let cpOutlineFirstRoundColor = UIColor.whiteColor()
+        private let cpOutlineSecondRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
+        private let cpSecondOutlineFirstRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
+        private let cpSecondOutlineSecondRoundColor = UIColor.whiteColor()
+        private let cpMaxValue: CGFloat = 100
+        private let cpMinValue: CGFloat = 1
+        private var cpCurrentValue: CGFloat = 1
+        private var cpIsFirstRound = true
         
-        // BAR LOADING
+        // BAR PROCESS
         
-        private let blOutlineWidth: CGFloat = 1.0
-        private let blOutlineColor = UIColor.whiteColor()
-        private let blInlineColor = UIColor.whiteColor()        
-        private let blMinValue: CGFloat = 0.0
-        private let blMaxValue: CGFloat = 100.0
-        private var blCurrentValue: CGFloat = 0.0
+        private let bpOutlineWidth: CGFloat = 1.0
+        private let bpOutlineColor = UIColor.whiteColor()
+        private let bpInlineColor = UIColor.whiteColor()
+        private let bpMinValue: CGFloat = 0.0
+        private let bpMaxValue: CGFloat = 100.0
+        private var bpCurrentValue: CGFloat = 0.0
         
         override init(frame: CGRect) {
             super.init(frame: frame)
@@ -356,8 +374,10 @@ class DVProgress: UIViewController {
                 handleCircleRotation(rect)
                 break
             case .CircleProcessUnlimited:
-                handleCircleProcessUnlimited(rect)
+                handleCircleProcess(rect)
                 break
+            case .CircleProcessByValue:
+                handleCircleProcess(rect)
             case .BarProcessByValue:
                 handleBarProcessByValue(rect)
                 break
@@ -367,7 +387,7 @@ class DVProgress: UIViewController {
             
         }
         
-        // MARK: - HANDLE CIRCLE ROTATING
+        // MARK: - HANDLE CIRCLE ROTATION
         
         private func handleCircleRotation(rect: CGRect) {
             if (style != DVProgress.AnimationView.AnimationStyle.CircleRotation) { return }
@@ -400,50 +420,64 @@ class DVProgress: UIViewController {
             CGContextRestoreGState(context)
         }
         
-        // MARK: - HANDLE CIRCLE LOADING
+        // MARK: - HANDLE CIRCLE PROCESS
         
-        private func handleCircleProcessUnlimited(rect: CGRect) {
-            if (style != DVProgress.AnimationView.AnimationStyle.CircleProcessUnlimited) { return }
-            let arcPerMarker = CGFloat((2 * M_PI)/Double(clFps))
+        private func handleCircleProcess(rect: CGRect) {
+            if (style != DVProgress.AnimationView.AnimationStyle.CircleProcessUnlimited && style != DVProgress.AnimationView.AnimationStyle.CircleProcessByValue) { return }
+            let arcPerMarker = CGFloat((2 * M_PI)/Double(cpMaxValue))
             let pathCenter = CGPoint(x: rect.width/2, y: rect.height/2)
-            let radius = min(rect.width/2, rect.height/2) - clOutlineWidth/2 - 10
+            let radius = min(rect.width/2, rect.height/2) - cpOutlineWidth/2 - 10
             let subRadius = radius - 12
             
-            clCurrentTurn += 1
-            if clCurrentTurn >= clFps {
-                clCurrentTurn = 1
-                clIsFirstRound = !clIsFirstRound
+            if (style == DVProgress.AnimationView.AnimationStyle.CircleProcessUnlimited) {
+                cpCurrentValue += 1
+                if cpCurrentValue >= cpMaxValue {
+                    cpCurrentValue = cpMinValue
+                    cpIsFirstRound = !cpIsFirstRound
+                }
+            } else {
+                if cpCurrentValue >= cpMaxValue {
+                    cpCurrentValue = cpMaxValue
+                }
             }
             
             let startAngle = CGFloat(-M_PI/2)
-            let endAngle = CGFloat(-M_PI/2) + (arcPerMarker*CGFloat(clCurrentTurn))
+            let endAngle = CGFloat(-M_PI/2) + (arcPerMarker*CGFloat(cpCurrentValue))
             
-            if(clIsFirstRound) { clOutlineFirstRoundColor.setStroke() }
-            else { clOutlineSecondRoundColor.setStroke() }
+            
+            if(cpIsFirstRound) { cpOutlineFirstRoundColor.setStroke() }
+            else { cpOutlineSecondRoundColor.setStroke() }
             
             let outlinePath = UIBezierPath(arcCenter: pathCenter, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
-            outlinePath.lineWidth = clOutlineWidth
+            outlinePath.lineWidth = cpOutlineWidth
             outlinePath.stroke()
             outlinePath.closePath()
             
             let subOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: subRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
-            subOutlinePath.lineWidth = subClOutLineWidth
+            subOutlinePath.lineWidth = cpSubOutLineWidth
             subOutlinePath.stroke()
             subOutlinePath.closePath()
             
-            if(clIsFirstRound) { clSecondOutlineFirstRoundColor.setStroke() }
-            else { clSecondOutlineSecondRoundColor.setStroke() }
+            if(cpIsFirstRound) { cpSecondOutlineFirstRoundColor.setStroke() }
+            else { cpSecondOutlineSecondRoundColor.setStroke() }
             
-            let secondOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: radius, startAngle: endAngle, endAngle: startAngle, clockwise: true)
-            secondOutlinePath.lineWidth = clOutlineWidth
-            secondOutlinePath.stroke()
-            secondOutlinePath.closePath()
+            if (cpCurrentValue < cpMaxValue) {
+                let secondOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: radius, startAngle: endAngle, endAngle: startAngle, clockwise: true)
+                secondOutlinePath.lineWidth = cpOutlineWidth
+                secondOutlinePath.stroke()
+                secondOutlinePath.closePath()
             
-            let secondSubOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: subRadius, startAngle: endAngle, endAngle: startAngle, clockwise: true)
-            secondSubOutlinePath.lineWidth = subClOutLineWidth
-            secondSubOutlinePath.stroke()
-            secondSubOutlinePath.closePath()
+                let secondSubOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: subRadius, startAngle: endAngle, endAngle: startAngle, clockwise: true)
+                secondSubOutlinePath.lineWidth = cpSubOutLineWidth
+                secondSubOutlinePath.stroke()
+                secondSubOutlinePath.closePath()
+            }
             
+        }
+        
+        func updateCurrentValueForCircleProcess(value: Int) {
+            cpCurrentValue = CGFloat(value)
+            setNeedsDisplay()
         }
         
         // MARK: - HANDLE BAR LOADING
@@ -451,26 +485,26 @@ class DVProgress: UIViewController {
         private func handleBarProcessByValue(rect: CGRect) {
             if (style != DVProgress.AnimationView.AnimationStyle.BarProcessByValue) { return }
             
-            blCurrentValue += CGFloat(arc4random()%5)
-            if(blCurrentValue > blMaxValue) {
-                blCurrentValue = blMaxValue
+            bpCurrentValue += CGFloat(arc4random()%5)
+            if(bpCurrentValue > bpMaxValue) {
+                bpCurrentValue = bpMaxValue
             }
             
-            self.layer.borderWidth = blOutlineWidth
-            self.layer.borderColor = blOutlineColor.CGColor
+            self.layer.borderWidth = bpOutlineWidth
+            self.layer.borderColor = bpOutlineColor.CGColor
             self.layer.cornerRadius = 8.0
             
-            let distanceToGo = (rect.width/blMaxValue) * blCurrentValue - (2*blOutlineWidth)
+            let distanceToGo = (rect.width/bpMaxValue) * bpCurrentValue - (2*bpOutlineWidth)
             
-            let linePath = UIBezierPath(roundedRect: CGRect(x: blOutlineWidth, y: blOutlineWidth, width: distanceToGo, height: rect.height - (2*blOutlineWidth)), cornerRadius: 5.0)
-            blInlineColor.setFill()
+            let linePath = UIBezierPath(roundedRect: CGRect(x: bpOutlineWidth, y: bpOutlineWidth, width: distanceToGo, height: rect.height - (2*bpOutlineWidth)), cornerRadius: 5.0)
+            bpInlineColor.setFill()
             linePath.fill()
             linePath.closePath()
             
         }
         
-        func setCurrentValueForBarLoading(value: Int) {
-            blCurrentValue = CGFloat(value)
+        func updateCurrentValueForBarProcess(value: Int) {
+            bpCurrentValue = CGFloat(value)
             setNeedsDisplay()
         }
     }
