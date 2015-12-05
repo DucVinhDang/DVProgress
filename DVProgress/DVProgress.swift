@@ -16,11 +16,11 @@ class DVProgress: UIViewController {
         case CircleRotation, CircleProcessUnlimited, CircleProcessByValue, BarProcessByValue, TextOnly
     }
     
-    weak var containerView: UIView!
-    weak var animationView: AnimationView?
-    weak var messengeTextView: UITextView?
-    weak var target: UIView!
-    weak var shadowView: UIView?
+    private weak var containerView: UIView!
+    private weak var animationView: AnimationView?
+    private weak var messengeTextView: UITextView?
+    private weak var target: UIView!
+    private weak var shadowView: UIView?
     
     private let deviceWidth = UIScreen.mainScreen().bounds.width
     private let deviceHeight = UIScreen.mainScreen().bounds.height
@@ -408,8 +408,8 @@ class DVProgress: UIViewController {
         private let cpSecondOutlineFirstRoundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
         private let cpSecondOutlineSecondRoundColor = UIColor.whiteColor()
         private let cpMaxValue: CGFloat = 100
-        private let cpMinValue: CGFloat = 1
-        private var cpCurrentValue: CGFloat = 1
+        private let cpMinValue: CGFloat = 0
+        private var cpCurrentValue: CGFloat = 0
         private var cpIsFirstRound = true
         
         // BAR PROCESS
@@ -505,7 +505,6 @@ class DVProgress: UIViewController {
             let startAngle = CGFloat(-M_PI/2)
             let endAngle = CGFloat(-M_PI/2) + (arcPerMarker*CGFloat(cpCurrentValue))
             
-            
             if(cpIsFirstRound) { cpOutlineFirstRoundColor.setStroke() }
             else { cpOutlineSecondRoundColor.setStroke() }
             
@@ -523,12 +522,12 @@ class DVProgress: UIViewController {
             else { cpSecondOutlineSecondRoundColor.setStroke() }
             
             if (cpCurrentValue < cpMaxValue) {
-                let secondOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: radius, startAngle: endAngle, endAngle: startAngle, clockwise: true)
+                let secondOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: radius, startAngle: endAngle, endAngle: CGFloat(M_PI * Double(3/2)) + CGFloat(M_PI/2), clockwise: true)
                 secondOutlinePath.lineWidth = cpOutlineWidth
                 secondOutlinePath.stroke()
                 secondOutlinePath.closePath()
             
-                let secondSubOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: subRadius, startAngle: endAngle, endAngle: startAngle, clockwise: true)
+                let secondSubOutlinePath = UIBezierPath(arcCenter: pathCenter, radius: subRadius, startAngle: endAngle, endAngle: CGFloat(M_PI * Double(3/2)) + CGFloat(M_PI/2), clockwise: true)
                 secondSubOutlinePath.lineWidth = cpSubOutLineWidth
                 secondSubOutlinePath.stroke()
                 secondSubOutlinePath.closePath()
@@ -537,6 +536,7 @@ class DVProgress: UIViewController {
         }
         
         func updateCurrentValueForCircleProcess(value: Int, completion: (Bool)->()) {
+            if CGFloat(value) < cpMinValue { return }
             cpCurrentValue = CGFloat(value)
             if cpCurrentValue >= cpMaxValue { cpCurrentValue = cpMaxValue }
             setNeedsDisplay()

@@ -43,7 +43,14 @@ class MainVC: UIViewController {
     func updateCircleProcess() {
         let randomValue = Int(arc4random()%10) + 5
         myValue += randomValue
-        progress?.updateCircleProcessByValue(myValue)
+        if(myValue >= 100) {
+            progress?.updateCircleProcessByValue(myValue)
+            myValue = 0
+            testTimer?.invalidate()
+            testTimer = nil
+        } else {
+            progress?.updateCircleProcessByValue(myValue)
+        }
     }
     
 
@@ -58,7 +65,7 @@ class MainVC: UIViewController {
         let randomValue = Int(arc4random()%10) + 5
         myValue += randomValue
         if(myValue >= 100) {
-            progress?.updateBarProcessByValue(100)
+            progress?.updateBarProcessByValue(myValue)
             myValue = 0
             testTimer?.invalidate()
             testTimer = nil
