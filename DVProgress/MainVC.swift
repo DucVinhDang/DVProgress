@@ -54,15 +54,27 @@ class MainVC: UIViewController {
         }
     }
     
-    @IBAction func handleBarProcessUnlimited(sender: AnyObject) {
-        
-    }
+
     
     @IBAction func handleBarProcessByValue(sender: AnyObject) {
+        myValue = 0
         progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.BarProcessByValue, messenge: "Bar Loading", animate: true)
-        delay(3, closure: {
-            self.progress?.hide(animate: true)
-        })
+        testTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: Selector("updateBarProcess"), userInfo: nil, repeats: true)
+    }
+    
+    func updateBarProcess() {
+        let randomValue = Int(arc4random()%10) + 5
+        myValue += randomValue
+        if(myValue >= 100) {
+            progress?.updateBarProcessByValue(100)
+            myValue = 0
+            testTimer?.invalidate()
+            testTimer = nil
+            progress?.hide(animate: true)
+        } else {
+            progress?.updateBarProcessByValue(myValue)
+        }
+
     }
     
     @IBAction func handleTextOnly(sender: AnyObject) {

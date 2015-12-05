@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OJG-pM-eNm">
-                    <rect key="frame" x="198" y="199" width="204" height="38"/>
+                    <rect key="frame" x="198" y="226" width="204" height="38"/>
                     <animations/>
                     <color key="backgroundColor" red="0.89176682692307696" green="0.52379455482649218" blue="0.69303010807706711" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -31,7 +31,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9S-qf-MY3">
-                    <rect key="frame" x="198" y="253" width="204" height="38"/>
+                    <rect key="frame" x="198" y="280" width="204" height="38"/>
                     <animations/>
                     <color key="backgroundColor" red="0.26649434187196008" green="0.89176682689999998" blue="0.65239040626372646" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -45,23 +45,8 @@
                         <action selector="handleCircleProcessByValue:" destination="-1" eventType="touchUpInside" id="GYA-91-gKi"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cgc-pb-8ye">
-                    <rect key="frame" x="198" y="307" width="204" height="38"/>
-                    <animations/>
-                    <color key="backgroundColor" red="0.67764239877791121" green="0.46984483830918344" blue="0.89176682689999998" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="204" id="9Ig-6A-xSs"/>
-                        <constraint firstAttribute="height" constant="38" id="zEi-OT-K6p"/>
-                    </constraints>
-                    <state key="normal" title="Bar Process Unlimited">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="handleBarProcessUnlimited:" destination="-1" eventType="touchUpInside" id="Nzz-65-Dve"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ji-y2-CAI">
-                    <rect key="frame" x="198" y="360" width="204" height="38"/>
+                    <rect key="frame" x="198" y="334" width="204" height="38"/>
                     <animations/>
                     <color key="backgroundColor" red="0.23592041255136992" green="0.52859541446164771" blue="0.89533253209999997" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -76,7 +61,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BVn-fE-beQ">
-                    <rect key="frame" x="198" y="414" width="204" height="38"/>
+                    <rect key="frame" x="198" y="387" width="204" height="38"/>
                     <animations/>
                     <color key="backgroundColor" red="0.94819711538461537" green="0.58335626364140891" blue="0.2303916078463282" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -91,7 +76,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xi9-JY-uBC">
-                    <rect key="frame" x="198" y="147" width="204" height="38"/>
+                    <rect key="frame" x="198" y="174" width="204" height="38"/>
                     <animations/>
                     <color key="backgroundColor" red="0.3258742572513601" green="0.86670211310325096" blue="0.89533253205128205" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -109,17 +94,15 @@
             <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="xi9-JY-uBC" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-134" id="AaR-19-IOf"/>
-                <constraint firstItem="7ji-y2-CAI" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="79" id="GzT-Z4-8y6"/>
-                <constraint firstItem="cgc-pb-8ye" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="S2Q-ld-4KO"/>
+                <constraint firstItem="xi9-JY-uBC" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-107" id="AaR-19-IOf"/>
+                <constraint firstItem="7ji-y2-CAI" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="53" id="GzT-Z4-8y6"/>
                 <constraint firstItem="xi9-JY-uBC" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="TBE-OB-Bb3"/>
-                <constraint firstItem="OJG-pM-eNm" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-82" id="XGn-vn-KYW"/>
+                <constraint firstItem="OJG-pM-eNm" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-55" id="XGn-vn-KYW"/>
                 <constraint firstItem="c9S-qf-MY3" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="aj3-Uj-T5p"/>
                 <constraint firstItem="BVn-fE-beQ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="ajC-Eo-9J0"/>
-                <constraint firstItem="c9S-qf-MY3" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-28" id="fBh-l9-ccq"/>
+                <constraint firstItem="c9S-qf-MY3" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-1" id="fBh-l9-ccq"/>
                 <constraint firstItem="OJG-pM-eNm" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="kYu-zo-Y5H"/>
-                <constraint firstItem="BVn-fE-beQ" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="133" id="oVd-LV-HQf"/>
-                <constraint firstItem="cgc-pb-8ye" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="26" id="oll-Gu-RfE"/>
+                <constraint firstItem="BVn-fE-beQ" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="106" id="oVd-LV-HQf"/>
                 <constraint firstItem="7ji-y2-CAI" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="vbg-pW-5zs"/>
             </constraints>
         </view>

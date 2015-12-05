@@ -13,7 +13,7 @@ class DVProgress: UIViewController {
     // MARK: - VARIABLES
     
     enum DVProgressStyle {
-        case CircleRotation, CircleProcessUnlimited, CircleProcessByValue, BarProcessUnlimited, BarProcessByValue, TextOnly
+        case CircleRotation, CircleProcessUnlimited, CircleProcessByValue, BarProcessByValue, TextOnly
     }
     
     weak var containerView: UIView!
@@ -35,6 +35,7 @@ class DVProgress: UIViewController {
     private var messenge: String = ""
     
     private var animate = true
+    private var autoHideWhenDone = false
     private let showDuration = 0.3
     private let hideDuration = 0.2
     
@@ -70,6 +71,68 @@ class DVProgress: UIViewController {
         if(messenge != "" || messenge != nil) { self.messenge = messenge! }
         self.animate = animate
         
+        setupAllComponents()
+        show()
+    }
+    
+    init(showCircleRotationInView targetView: UIView, style: DVProgressStyle, messenge: String?, animate: Bool) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.target = targetView
+        self.progressStyle = .CircleRotation
+        if(messenge != "" || messenge != nil) { self.messenge = messenge! }
+        self.animate = animate
+        setupAllComponents()
+        show()
+    }
+    
+    init(showCircleProgressUnlimitedInView targetView: UIView, style: DVProgressStyle, messenge: String?, animate: Bool) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.target = targetView
+        self.progressStyle = .CircleProcessUnlimited
+        if(messenge != "" || messenge != nil) { self.messenge = messenge! }
+        self.animate = animate
+        setupAllComponents()
+        show()
+    }
+    
+    init(showCircleProgressByValueInView targetView: UIView, style: DVProgressStyle, messenge: String?, animate: Bool, autoHideWhenDone: Bool) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.target = targetView
+        self.progressStyle = .CircleProcessByValue
+        if(messenge != "" || messenge != nil) { self.messenge = messenge! }
+        self.animate = animate
+        self.autoHideWhenDone = autoHideWhenDone
+        setupAllComponents()
+        show()
+    }
+    
+    init(showBarProgressByValueInView targetView: UIView, style: DVProgressStyle, messenge: String?, animate: Bool, autoHideWhenDone: Bool) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.target = targetView
+        self.progressStyle = .BarProcessByValue
+        if(messenge != "" || messenge != nil) { self.messenge = messenge! }
+        self.animate = animate
+        self.autoHideWhenDone = autoHideWhenDone
+        setupAllComponents()
+        show()
+    }
+    
+    init(showTextOnlyInView targetView: UIView, style: DVProgressStyle, messenge: String?, animate: Bool) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.target = targetView
+        self.progressStyle = .TextOnly
+        if(messenge != "" || messenge != nil) { self.messenge = messenge! }
+        self.animate = animate
+        setupAllComponents()
+        show()
+    }
+    
+    private func setupAllComponents() {
         createContainerView()
         createAnimationView()
         createMessengeTextView()
@@ -84,9 +147,6 @@ class DVProgress: UIViewController {
         case .CircleProcessByValue:
             handleCircleProcessByValue()
             break
-        case .BarProcessUnlimited:
-            handleBarProcessUnlimited()
-            break
         case .BarProcessByValue:
             handleBarProcessByValue()
             break
@@ -94,9 +154,10 @@ class DVProgress: UIViewController {
             handleTextOnly()
             break
         }
-        
-        show()
+
     }
+    
+    /////
 
     private func handleCircleRotation() {
         animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleRotation
@@ -110,10 +171,6 @@ class DVProgress: UIViewController {
     
     private func handleCircleProcessByValue() {
         animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleProcessByValue
-    }
-    
-    private func handleBarProcessUnlimited() {
-        animationView?.style = DVProgress.AnimationView.AnimationStyle.BarProcessUnlimited
     }
     
     private func handleBarProcessByValue() {
@@ -150,7 +207,7 @@ class DVProgress: UIViewController {
         cView.backgroundColor = UIColor.blackColor()
         cView.alpha = 0.5
         cView.clipsToBounds = true
-        cView.layer.cornerRadius = 10.0
+        cView.layer.cornerRadius = 8.0
         cView.translatesAutoresizingMaskIntoConstraints = true
         cView.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin, UIViewAutoresizing.FlexibleTopMargin, UIViewAutoresizing.FlexibleBottomMargin]
         view.addSubview(cView)
@@ -159,7 +216,7 @@ class DVProgress: UIViewController {
     
     private func createAnimationView() {
         if progressStyle != .TextOnly {
-            if progressStyle == .BarProcessByValue || progressStyle == .BarProcessUnlimited {
+            if progressStyle == .BarProcessByValue {
                 containerViewWidth = 220
                 containerView.frame.size.width = containerViewWidth
                 animationViewWidth = containerViewWidth - 60
@@ -483,9 +540,9 @@ class DVProgress: UIViewController {
         // MARK: - HANDLE BAR LOADING
         
         private func handleBarProcessByValue(rect: CGRect) {
+            
             if (style != DVProgress.AnimationView.AnimationStyle.BarProcessByValue) { return }
             
-            bpCurrentValue += CGFloat(arc4random()%5)
             if(bpCurrentValue > bpMaxValue) {
                 bpCurrentValue = bpMaxValue
             }
@@ -494,7 +551,8 @@ class DVProgress: UIViewController {
             self.layer.borderColor = bpOutlineColor.CGColor
             self.layer.cornerRadius = 8.0
             
-            let distanceToGo = (rect.width/bpMaxValue) * bpCurrentValue - (2*bpOutlineWidth)
+            var distanceToGo = (rect.width/bpMaxValue) * bpCurrentValue - (2*bpOutlineWidth)
+            if distanceToGo < 0 { distanceToGo = 0 }
             
             let linePath = UIBezierPath(roundedRect: CGRect(x: bpOutlineWidth, y: bpOutlineWidth, width: distanceToGo, height: rect.height - (2*bpOutlineWidth)), cornerRadius: 5.0)
             bpInlineColor.setFill()
