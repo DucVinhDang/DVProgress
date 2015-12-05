@@ -18,22 +18,22 @@ class MainVC: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    @IBAction func handleCircleRotating(sender: AnyObject) {
-        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleRotating, messenge: "Waiting for server", animate: true)
+    @IBAction func handleCircleRotation(sender: AnyObject) {
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleRotation, messenge: "Waiting for server", animate: true)
         delay(5, closure: {
             self.progress?.hide(animate: true)
         })
     }
     
-    @IBAction func handleCircleLoading(sender: AnyObject) {
-        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleLoading, messenge: "Loading...", animate: true)
+    @IBAction func handleCircleProcessUnlimited(sender: AnyObject) {
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.CircleProcessUnlimited, messenge: "Loading...", animate: true)
         delay(10, closure: {
             self.progress?.hide(animate: true)
         })
     }
     
-    @IBAction func handleBarLoading(sender: AnyObject) {
-        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.BarLoading, messenge: "Bar Loading", animate: true)
+    @IBAction func handleBarProcessByValue(sender: AnyObject) {
+        progress = DVProgress(showInView: self.view, style: DVProgress.DVProgressStyle.BarProcessByValue, messenge: "Bar Loading", animate: true)
         delay(3, closure: {
             self.progress?.hide(animate: true)
         })

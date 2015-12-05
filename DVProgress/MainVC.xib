@@ -15,58 +15,67 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xi9-JY-uBC">
-                    <rect key="frame" x="222" y="203" width="156" height="38"/>
-                    <animations/>
-                    <color key="backgroundColor" red="0.3258742572513601" green="0.86670211310325096" blue="0.89533253205128205" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="156" id="p5h-YG-cMt"/>
-                        <constraint firstAttribute="height" constant="38" id="zIQ-2d-Gy6"/>
-                    </constraints>
-                    <state key="normal" title="Circle Rotating">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="handleCircleRotating:" destination="-1" eventType="touchUpInside" id="zlv-3Y-A6i"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OJG-pM-eNm">
-                    <rect key="frame" x="222" y="255" width="156" height="38"/>
+                    <rect key="frame" x="198" y="199" width="204" height="38"/>
                     <animations/>
                     <color key="backgroundColor" red="0.89176682692307696" green="0.52379455482649218" blue="0.69303010807706711" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="156" id="Mfe-pe-xa7"/>
-                        <constraint firstAttribute="height" constant="38" id="xul-UE-Z4U"/>
+                        <constraint firstAttribute="width" constant="204" id="4gP-p7-q4A"/>
+                        <constraint firstAttribute="height" constant="38" id="iTY-Az-aUf"/>
                     </constraints>
-                    <state key="normal" title="Circle Loading">
+                    <state key="normal" title="Circle Process Unlimited">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="handleCircleLoading:" destination="-1" eventType="touchUpInside" id="VVB-u4-nBz"/>
+                        <action selector="handleCircleProcessUnlimited:" destination="-1" eventType="touchUpInside" id="9eR-bK-g0p"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9S-qf-MY3">
+                    <rect key="frame" x="198" y="253" width="204" height="38"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.26649434187196008" green="0.89176682689999998" blue="0.65239040626372646" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="204" id="VY9-ZA-Cmf"/>
+                        <constraint firstAttribute="height" constant="38" id="iQl-wU-CEx"/>
+                    </constraints>
+                    <state key="normal" title="Circle Process By Value">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cgc-pb-8ye">
+                    <rect key="frame" x="198" y="307" width="204" height="38"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.67764239877791121" green="0.46984483830918344" blue="0.89176682689999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="204" id="9Ig-6A-xSs"/>
+                        <constraint firstAttribute="height" constant="38" id="zEi-OT-K6p"/>
+                    </constraints>
+                    <state key="normal" title="Bar Process Unlimited">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ji-y2-CAI">
-                    <rect key="frame" x="222" y="307" width="156" height="38"/>
+                    <rect key="frame" x="198" y="360" width="204" height="38"/>
                     <animations/>
                     <color key="backgroundColor" red="0.23592041255136992" green="0.52859541446164771" blue="0.89533253209999997" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="38" id="9D5-Oz-GYg"/>
-                        <constraint firstAttribute="width" constant="156" id="OAp-XT-DV3"/>
+                        <constraint firstAttribute="height" constant="38" id="E53-Ts-Avl"/>
+                        <constraint firstAttribute="width" constant="204" id="ITj-NR-tyK"/>
                     </constraints>
-                    <state key="normal" title="Bar Loading">
+                    <state key="normal" title="Bar Process By Value">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="handleBarLoading:" destination="-1" eventType="touchUpInside" id="F5y-pS-CrJ"/>
+                        <action selector="handleBarProcessByValue:" destination="-1" eventType="touchUpInside" id="OGr-c1-X5f"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BVn-fE-beQ">
-                    <rect key="frame" x="222" y="358" width="156" height="38"/>
+                    <rect key="frame" x="198" y="414" width="204" height="38"/>
                     <animations/>
                     <color key="backgroundColor" red="0.94819711538461537" green="0.58335626364140891" blue="0.2303916078463282" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="156" id="XdZ-kZ-of3"/>
-                        <constraint firstAttribute="height" constant="38" id="a7d-4l-gSY"/>
+                        <constraint firstAttribute="width" constant="204" id="G0K-1V-MFd"/>
+                        <constraint firstAttribute="height" constant="38" id="GsC-Gk-NS6"/>
                     </constraints>
                     <state key="normal" title="Text Only">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -75,18 +84,37 @@
                         <action selector="handleTextOnly:" destination="-1" eventType="touchUpInside" id="RH2-DX-V2d"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xi9-JY-uBC">
+                    <rect key="frame" x="198" y="147" width="204" height="38"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.3258742572513601" green="0.86670211310325096" blue="0.89533253205128205" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="204" id="wx0-Iu-zx5"/>
+                        <constraint firstAttribute="height" constant="38" id="zRg-FG-o2W"/>
+                    </constraints>
+                    <state key="normal" title="Circle Rotation">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="handleCircleRotation:" destination="-1" eventType="touchUpInside" id="Ffr-0R-G5H"/>
+                    </connections>
+                </button>
             </subviews>
             <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="OJG-pM-eNm" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-26" id="5c3-8d-XxN"/>
-                <constraint firstItem="xi9-JY-uBC" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="73B-Zz-bdw"/>
-                <constraint firstItem="OJG-pM-eNm" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="87f-hA-aHg"/>
-                <constraint firstItem="BVn-fE-beQ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="GdW-bK-jG7"/>
-                <constraint firstItem="7ji-y2-CAI" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="26" id="HgH-EH-01W"/>
-                <constraint firstItem="xi9-JY-uBC" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-78" id="PTr-cR-xZo"/>
-                <constraint firstItem="BVn-fE-beQ" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="77" id="QSy-Ip-WR5"/>
-                <constraint firstItem="7ji-y2-CAI" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Yge-WL-X2T"/>
+                <constraint firstItem="xi9-JY-uBC" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-134" id="AaR-19-IOf"/>
+                <constraint firstItem="7ji-y2-CAI" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="79" id="GzT-Z4-8y6"/>
+                <constraint firstItem="cgc-pb-8ye" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="S2Q-ld-4KO"/>
+                <constraint firstItem="xi9-JY-uBC" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="TBE-OB-Bb3"/>
+                <constraint firstItem="OJG-pM-eNm" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-82" id="XGn-vn-KYW"/>
+                <constraint firstItem="c9S-qf-MY3" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="aj3-Uj-T5p"/>
+                <constraint firstItem="BVn-fE-beQ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="ajC-Eo-9J0"/>
+                <constraint firstItem="c9S-qf-MY3" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-28" id="fBh-l9-ccq"/>
+                <constraint firstItem="OJG-pM-eNm" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="kYu-zo-Y5H"/>
+                <constraint firstItem="BVn-fE-beQ" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="133" id="oVd-LV-HQf"/>
+                <constraint firstItem="cgc-pb-8ye" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="26" id="oll-Gu-RfE"/>
+                <constraint firstItem="7ji-y2-CAI" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="vbg-pW-5zs"/>
             </constraints>
         </view>
     </objects>

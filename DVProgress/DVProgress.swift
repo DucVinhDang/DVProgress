@@ -13,7 +13,7 @@ class DVProgress: UIViewController {
     // MARK: - VARIABLES
     
     enum DVProgressStyle {
-        case CircleRotating, CircleLoading, BarLoading, TextOnly
+        case CircleRotation, CircleProcessUnlimited, CircleProcessByValue, BarProcessUnlimited, BarProcessByValue, TextOnly
     }
     
     weak var containerView: UIView!
@@ -31,7 +31,7 @@ class DVProgress: UIViewController {
     private let containerViewPadding: CGFloat = 10
     private var distanceBetweenAnimationViewAndMessengeTextView: CGFloat = 0
     
-    private var progressStyle: DVProgressStyle = .CircleRotating
+    private var progressStyle: DVProgressStyle = .CircleRotation
     private var messenge: String = ""
     
     private var animate = true
@@ -75,31 +75,33 @@ class DVProgress: UIViewController {
         createMessengeTextView()
         
         switch (self.progressStyle) {
-        case .CircleRotating:
-            handleCircleRotating()
-        case .CircleLoading:
-            handleCircleLoading()
-        case .BarLoading:
-            handleBarLoading()
+        case .CircleRotation:
+            handleCircleRotation()
+        case .CircleProcessUnlimited:
+            handleCircleProcessUnlimited()
+        case .BarProcessByValue:
+            handleBarProcessByValue()
         case .TextOnly:
             handleTextOnly()
+        default:
+            break
         }
         
         show()
     }
 
-    private func handleCircleRotating() {
-        animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleRotating
+    private func handleCircleRotation() {
+        animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleRotation
         animationTimer = NSTimer.scheduledTimerWithTimeInterval(crDuration, target: self, selector: Selector("updateCircleRotating"), userInfo: nil, repeats: true)
     }
     
-    private func handleCircleLoading() {
-        animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleLoading
+    private func handleCircleProcessUnlimited() {
+        animationView?.style = DVProgress.AnimationView.AnimationStyle.CircleProcessUnlimited
         animationTimer = NSTimer.scheduledTimerWithTimeInterval(clDuration, target: self, selector: Selector("updateCircleLoading"), userInfo: nil, repeats: true)
     }
     
-    private func handleBarLoading() {
-        animationView?.style = DVProgress.AnimationView.AnimationStyle.BarLoading
+    private func handleBarProcessByValue() {
+        animationView?.style = DVProgress.AnimationView.AnimationStyle.BarProcessByValue
         animationTimer = NSTimer.scheduledTimerWithTimeInterval(crDuration, target: self, selector: Selector("updateBarLoading"), userInfo: nil, repeats: true)
     }
     
@@ -145,7 +147,7 @@ class DVProgress: UIViewController {
     
     private func createAnimationView() {
         if progressStyle != .TextOnly {
-            if progressStyle == .BarLoading {
+            if progressStyle == .BarProcessByValue || progressStyle == .BarProcessUnlimited {
                 containerViewWidth = 220
                 containerView.frame.size.width = containerViewWidth
                 animationViewWidth = containerViewWidth - 60
@@ -283,8 +285,8 @@ class DVProgress: UIViewController {
         hide()
     }
     
-    func setCurrentValueForBarLoading(value: Int) {
-        if(progressStyle != DVProgressStyle.BarLoading) { return }
+    func setCurrentValueForBarProcessByValue(value: Int) {
+        if(progressStyle != DVProgressStyle.BarProcessByValue) { return }
         animationView?.setCurrentValueForBarLoading(value)
     }
     
@@ -295,7 +297,7 @@ class DVProgress: UIViewController {
     class AnimationView: UIView {
         
         enum AnimationStyle {
-            case CircleRotating, CircleLoading, BarLoading
+            case CircleRotation, CircleProcessUnlimited, CircleProcessByValue, BarProcessUnlimited, BarProcessByValue, TextOnly
         }
         
         var style: AnimationStyle? {
@@ -350,22 +352,25 @@ class DVProgress: UIViewController {
             if(style == nil) { return }
             
             switch style! {
-            case .CircleRotating:
-                handleCircleRotating(rect)
+            case .CircleRotation:
+                handleCircleRotation(rect)
                 break
-            case .CircleLoading:
-                handleCircleLoading(rect)
+            case .CircleProcessUnlimited:
+                handleCircleProcessUnlimited(rect)
                 break
-            case .BarLoading:
-                handleBarLoading(rect)
+            case .BarProcessByValue:
+                handleBarProcessByValue(rect)
+                break
+            default:
                 break
             }
+            
         }
         
         // MARK: - HANDLE CIRCLE ROTATING
         
-        private func handleCircleRotating(rect: CGRect) {
-            if (style != DVProgress.AnimationView.AnimationStyle.CircleRotating) { return }
+        private func handleCircleRotation(rect: CGRect) {
+            if (style != DVProgress.AnimationView.AnimationStyle.CircleRotation) { return }
             let context = UIGraphicsGetCurrentContext()
             
             CGContextSaveGState(context)
@@ -397,8 +402,8 @@ class DVProgress: UIViewController {
         
         // MARK: - HANDLE CIRCLE LOADING
         
-        private func handleCircleLoading(rect: CGRect) {
-            if (style != DVProgress.AnimationView.AnimationStyle.CircleLoading) { return }
+        private func handleCircleProcessUnlimited(rect: CGRect) {
+            if (style != DVProgress.AnimationView.AnimationStyle.CircleProcessUnlimited) { return }
             let arcPerMarker = CGFloat((2 * M_PI)/Double(clFps))
             let pathCenter = CGPoint(x: rect.width/2, y: rect.height/2)
             let radius = min(rect.width/2, rect.height/2) - clOutlineWidth/2 - 10
@@ -443,8 +448,8 @@ class DVProgress: UIViewController {
         
         // MARK: - HANDLE BAR LOADING
         
-        private func handleBarLoading(rect: CGRect) {
-            if (style != DVProgress.AnimationView.AnimationStyle.BarLoading) { return }
+        private func handleBarProcessByValue(rect: CGRect) {
+            if (style != DVProgress.AnimationView.AnimationStyle.BarProcessByValue) { return }
             
             blCurrentValue += CGFloat(arc4random()%5)
             if(blCurrentValue > blMaxValue) {
